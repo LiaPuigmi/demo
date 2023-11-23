@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -10,15 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.pojos.TextToJSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-@Controller
+@RestController
+@RequestMapping("/apiVersion")
 public class HomeController {
 
 	
@@ -94,20 +98,42 @@ public class HomeController {
 //				httpHeaders, HttpStatus.OK);
 //	}
 	
-		@ResponseBody
-		@ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-		@RequestMapping("/aleatorio")
-	    public ResponseEntity<String> aleatorio() {
-	        Random random = new Random();
-	        int numero = random.nextInt(3);
-	        if (numero == 0) {
-	            return new ResponseEntity<String>("El número es 0", HttpStatus.OK);
-	        } else if(numero==1){
-	            return new ResponseEntity<String>("El número es 1", HttpStatus.NOT_FOUND);
-	        }else {
-	            return new ResponseEntity<String>("El número es 2", HttpStatus.I_AM_A_TEAPOT);
-	        }
-	    }
+	/*
+	 * @ResponseBody
+	 * 
+	 * @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+	 * 
+	 * @RequestMapping("/aleatorio") public ResponseEntity<String> aleatorio() {
+	 * Random random = new Random(); int numero = random.nextInt(3); if (numero ==
+	 * 0) { return new ResponseEntity<String>("El número es 0", HttpStatus.OK); }
+	 * else if(numero==1){ return new ResponseEntity<String>("El número es 1",
+	 * HttpStatus.NOT_FOUND); }else { return new
+	 * ResponseEntity<String>("El número es 2", HttpStatus.I_AM_A_TEAPOT); } }
+	 */
+	
+	//@Autowired
+	//private JdbcTemplate jdbcTemplate;
 
+	@ResponseStatus(value = HttpStatus.NOT_FOUND,reason="No se encuentra el recurso")
+	@GetMapping(value="/notfound")
+	public String notfound() {
+		return "hola";
+	}
+	
+	@ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT,reason="Making tea like a sir!")
+	@GetMapping(value="/hacerte")
+	public ModelAndView hacerte() {
+	  ModelAndView modelAndView = new ModelAndView(); 
+	  modelAndView.setViewName("indexBnb.html");
+	  modelAndView.setStatus(HttpStatus.I_AM_A_TEAPOT); 
+	  return modelAndView;
+	}
+	
+	@ResponseStatus(value = HttpStatus.OK,reason="Making coffe like a yonkie!")
+	@GetMapping(value="/hacercafe")
+	public String hacercafe() {
+		return "hola";
+	}
+	
 }
 
